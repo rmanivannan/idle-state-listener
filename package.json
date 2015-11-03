@@ -1,0 +1,28 @@
+{
+  "name": "idle-state-listener",
+  "version": "1.0.0",
+  "description": "JavaScript helper to add users idle state Listener on browser.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rmanivannan/idle-state-listener.js.git"
+  },
+  "keywords": [
+    "javascript",
+    "helper",
+    "user agent",
+    "browser",
+    "idle",
+    "session",
+    "state"
+  ],
+  "author": "Manivannan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmanivannan/idle-state-listener/issues"
+  },
+  "homepage": "https://github.com/rmanivannan/idle-state-listener"
+}
