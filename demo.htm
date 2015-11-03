@@ -1,0 +1,167 @@
+<html>
+
+<head>
+  <title>state manager</title>
+  <style type=text/css>
+  #stateVal {
+    float: right;
+    width: 250px;
+    margin-top: 0;
+    margin-left: 20px
+  }
+  #buttons {
+    float: left
+  }
+  .cnt {
+    width: 500px;
+    margin: 0 auto
+  }
+  body {
+    background: #eee;
+    color: #333;
+    font-family: monospace
+  }
+  body.night {
+    background: #333;
+    color: #eee
+  }
+  input[type=button] {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: block;
+    width: 100%;
+    border: 1px solid #777
+  }
+  .active {
+    position: relative;
+    -webkit-animation: spin .24s linear infinite;
+    -moz-animation: spin .24s linear infinite;
+    animation: spin .24s linear infinite
+  }
+  @-moz-keyframes spin {
+    0% {
+      -moz-transform: rotate(-2deg)
+    }
+    25% {
+      -moz-transform: rotate(0)
+    }
+    50% {
+      -moz-transform: rotate(2deg)
+    }
+    75% {
+      -moz-transform: rotate(0)
+    }
+    100% {
+      -moz-transform: rotate(-2deg)
+    }
+  }
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(-2deg)
+    }
+    25% {
+      -webkit-transform: rotate(0)
+    }
+    50% {
+      -webkit-transform: rotate(2deg)
+    }
+    75% {
+      -webkit-transform: rotate(0)
+    }
+    100% {
+      -webkit-transform: rotate(-2deg)
+    }
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(-2deg)
+    }
+    25% {
+      transform: rotate(0)
+    }
+    50% {
+      transform: rotate(2deg)
+    }
+    75% {
+      transform: rotate(0)
+    }
+    100% {
+      transform: rotate(-2deg)
+    }
+  }
+  </style>
+
+  <body>
+    <div class=cnt>
+      <h1>State Manager</h1>
+      <hr>
+      <br>
+      <div id=buttons>
+        <input type=button id=start5 value="Start 5 sec idel state listener">
+        <br>
+        <br>
+        <input type=button id=start7 value="Start 7 sec idel state listener">
+        <br>
+        <br>
+        <input type=button id=stop5 value="Stop 5 sec idel state listener">
+        <br>
+        <br>
+        <input type=button id=stop7 value="Stop 7 sec idel state listener">
+        <br>
+        <br>
+        <input type=button id=stopAll value="Stop all listener">
+        <br>
+        <br>
+        <input type=button id=cleareLog value="Cleare logs">
+        <br>
+        <br>
+      </div>
+      <p id=stateVal><strong>Logs:</strong>
+      </p>
+    </div>
+    <script src="script.js"></script>
+    <script>
+    (function(e) {
+      var state = GetState(),
+        start5 = document.getElementById("start5"),
+        start7 = document.getElementById("start7"),
+        stateVal = document.getElementById("stateVal");
+      start5.onclick = function() {
+        state.addListener(5000, function() {
+          stateVal.innerHTML += "<br/>inactive more then 5 sec";
+          start5.removeAttribute("class");
+        }); 
+        stateVal.innerHTML += "<br/>5 sec listener starts";
+        start5.setAttribute("class", "active");
+      } 
+      start7.onclick = function() {
+        state.addListener(7000, function() {
+          stateVal.innerHTML += "<br/>inactive more then 7 sec"; 
+          start7.removeAttribute("class");
+        });
+        stateVal.innerHTML += "<br/>7 sec listener starts"; 
+        start7.setAttribute("class", "active");
+      };
+      document.getElementById("stop5").onclick = function() {
+        state.removeListener(5000);
+        start5.removeAttribute("class"); 
+        stateVal.innerHTML += "<br/>5sec listener removed";
+      }, 
+      document.getElementById("stop7").onclick = function() {
+        start7.removeAttribute("class");
+        state.removeListener(7000);
+        stateVal.innerHTML += "<br/>7sec listener removed";
+      }; 
+      document.getElementById("stopAll").onclick = function() {
+        state.removeAllListeners();
+         stateVal.innerHTML += "<br/>All listener removed";
+        start5.removeAttribute("class"), start7.removeAttribute("class");
+      }; 
+      document.getElementById("cleareLog").onclick = function() {
+        stateVal.innerHTML = "<strong>Logs:</strong>";
+      }
+    })();
+    var t = new Date;
+    (t.getHours() < 6 || t.getHours() > 20) && document.body.setAttribute("class", "night");
+    </script>
