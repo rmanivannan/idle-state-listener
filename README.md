@@ -9,6 +9,9 @@ Install ` idle-state-listener `:
 npm install idle-state-listener --save-dev
 ```
 
+## Demo
+URL: http://rmanivannan.github.io/demos/idel-state-manager/index.htm
+
 ## Example
 
 ``` javascript
