@@ -1,6 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <html>
-
 <head>
   <title>state manager</title>
   <style type=text/css>
@@ -127,9 +126,10 @@
       var state = GetState(),
         start5 = document.getElementById("start5"),
         start7 = document.getElementById("start7"),
-        stateVal = document.getElementById("stateVal");
+        stateVal = document.getElementById("stateVal"),
+        state5s;
       start5.onclick = function() {
-        state.addListener(5000, function() {
+        state5s = state.addListener(5000, function() {
           stateVal.innerHTML += "<br/>inactive more then 5 sec";
           start5.removeAttribute("class");
         }); 
@@ -145,7 +145,7 @@
         start7.setAttribute("class", "active");
       };
       document.getElementById("stop5").onclick = function() {
-        state.removeListener(5000);
+        state5s.removeListener();
         start5.removeAttribute("class"); 
         stateVal.innerHTML += "<br/>5sec listener removed";
       }, 
