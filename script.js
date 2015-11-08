@@ -2,9 +2,6 @@ var visibleChangeListener = (function(){
     var stateKey, 
         eventKey,
         callback,
-        currentTs = function () {
-                      return (new Date()).getTime();
-                    },
         keys = {
                 hidden       : "visibilitychange",
                 webkitHidden : "webkitvisibilitychange",
@@ -35,7 +32,10 @@ var visibleChangeListener = (function(){
 
 
 function UserStateManager () {
-  var localOb = null;
+  var localOb   = null,
+      currentTs = function () {
+                    return (new Date()).getTime();
+                  };
   this.addListener = function (ts,cb) {
     var stateName = 'state_ts_'+ts,
     self = this;
@@ -135,5 +135,5 @@ var GetState = function () {
   }
   return stateManager;
 }
-if(module) 
+if(typeof module != "undefined") 
   module.exports = {"GetState": GetState}
