@@ -22,10 +22,13 @@ var stateManager = require('idle-state-listener').GetState();
 UI.setAttribute("class", "active");
 
 // add listener for idle state, after 5s(5000ms) of users idle state callback function get invoked
-stateManager.addListener(5000, function() {
+var state5sec = stateManager.addListener(5000, function() {
   UI.removeAttribute("class"); // 
 }); 
 
-state.removeListener(5000); // removed the attached listened by argument value / time delay in ms
+stateManager.removeListener(5000); // removed the attached listened by argument value / time delay in ms
+//state5sec.removeListener(); // same as above 
+
+state5sec.reInitiate() // re-initiates 5sec state
 
 ```
