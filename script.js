@@ -1,13 +1,16 @@
 var visibleChangeListener = (function(){
     var stateKey, 
         eventKey,
-        callback, 
+        callback,
+        currentTs = function () {
+                      return (new Date()).getTime();
+                    },
         keys = {
                 hidden       : "visibilitychange",
                 webkitHidden : "webkitvisibilitychange",
                 mozHidden    : "mozvisibilitychange",
                 msHidden     : "msvisibilitychange"
-    };
+               };
     for (stateKey in keys) {
         if (stateKey in document) {
             eventKey = keys[stateKey];
@@ -34,7 +37,8 @@ var visibleChangeListener = (function(){
 function UserStateManager () {
   var localOb = null;
   this.addListener = function (ts,cb) {
-    var stateName = 'state_ts_'+ts;
+    var stateName = 'state_ts_'+ts,
+    self = this;
     if(!localOb){
       this.eventManager();
       localOb = [];
@@ -47,6 +51,13 @@ function UserStateManager () {
       console.warn('Can\'t add ' + stateName + ' as it is already exist (or) invalid input.');
       return false;
     }
+    return { 
+             'removeListener' : this.removeListener.bind(this,ts),
+             'reInitiate'     : function(){
+                                  self.removeListener.bind(self,ts);
+                                  self.addListener.bind(self,ts,cb);
+                                }
+           }
   }
   this.setTimers = function (ts,cb) {
     var stateName = 'state_ts_'+ts;
@@ -55,7 +66,7 @@ function UserStateManager () {
       cb();
       self.removeListener(localOb[stateName]['duration']);
     },ts);
-    localOb[stateName]['endTs'] = ts + (new Date()).getTime();
+    localOb[stateName]['endTs'] = ts + currentTs();
     localOb[stateName]['cb'] = cb;
   }
   this.removeListener = function (ts) {
@@ -87,14 +98,12 @@ function UserStateManager () {
     window.onkeypress  = this.resetTimerForActiveUser.bind(this);
     window.onfocus     = this.resetTimeoutONFocus.bind(this);
     window.onpageshow  = this.resetTimeoutONFocus.bind(this);
-    visibleChangeListener.addVisibleChangeListener(function(){
-      self.resetTimeoutONFocus();
-    });
+    visibleChangeListener.addVisibleChangeListener(this.resetTimeoutONFocus.bind(this));
   }
   this.resetTimeoutONFocus = function () {
     for(var i in localOb){
       if(localOb[i])
-      if(localOb[i]['endTs'] >= (new Date()).getTime()){
+      if(localOb[i]['endTs'] >= currentTs()){
           clearTimeout(localOb[i]['timer']);
           this.setTimers(localOb[i]['duration'],localOb[i]['cb']);
         }else{
@@ -108,7 +117,7 @@ function UserStateManager () {
       if(localOb[i]){
         var ts = localOb[i]['duration'];
         var cb = localOb[i]['cb'];
-        if(localOb[i]['endTs'] >= (new Date()).getTime()){
+        if(localOb[i]['endTs'] >= currentTs()){
           clearTimeout(localOb[i]['timer']);
           this.setTimers(ts,cb);
         }else{
