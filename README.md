@@ -1,5 +1,5 @@
 # User-agent Idle state callback  
-JavaScript helper to add users idle state Listener on browser
+This library/npm helper to add users idle state Listener on browser
 
 ## Setup
 
